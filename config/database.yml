@@ -4,7 +4,7 @@
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem 'sqlite3'
 development:
-    database: movup_dev
+    database: sample_dev
     adapter: postgresql
     host: localhost
     username: sboucher
@@ -13,7 +13,7 @@ development:
     pool: 5
 
 test: &test
-    database: movup_test
+    database: sample_test
     adapter: postgresql
     host: localhost
     username: sboucher
@@ -22,7 +22,7 @@ test: &test
     pool: 5
 
 production:
-    database: movup_dev
+    database: sample_dev
     adapter: postgresql
     host: localhost
     username: sboucher
