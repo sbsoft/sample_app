@@ -10,7 +10,10 @@ describe "Authentication" do
   end
   
   describe "not signed in" do
+    it { should_not have_link('Users') }
+    it { should_not have_link('Profile') }
     it { should_not have_link('Settings') }
+    it { should_not have_link('Sign out') }
   end
   
   describe "signin" do
@@ -46,7 +49,7 @@ describe "Authentication" do
       let(:user) { FactoryGirl.create(:user) }
       
       describe "when attempting to visit a protected page" do
-        before do
+        before  do
           visit edit_user_path(user)
           fill_in "Email", with: user.email
           fill_in "Password", with: user.password
@@ -56,6 +59,12 @@ describe "Authentication" do
         describe "after signing in" do
           it "should render the desired protected page" do
             page.should have_selector('title', text: 'Edit user')
+          end
+          describe "when signing in again" do
+            before { valid_signin user }
+            it "should render the default (profile) page" do
+              page.should have_selector('title', text: user.name)
+            end
           end
         end
       end
@@ -87,7 +96,7 @@ describe "Authentication" do
       end
       
       describe "submitting a PUT request to the Users#update action" do
-        before { put user_path(wrong_user) }
+        before  { put user_path(wrong_user) }
         specify { response.should redirect_to(root_path) }
       end
     end
@@ -100,6 +109,11 @@ describe "Authentication" do
       
       describe "submitting a DELETE request to the Users#destroy action" do
         before { delete user_path(user) }
+        specify { response.should redirect_to(root_path) }
+      end
+      
+      describe "attempting to create a new User" do
+        before { post users_path }
         specify { response.should redirect_to(root_path) }
       end
     end
